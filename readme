@@ -1,0 +1,142 @@
+API
+
+This is the backend server for the **LoanSiya** application. It is built using **Node.js** and **Express**, and integrates with **Google Cloud Storage (GCS)** for storing client, loan, and agreement data.
+
+---
+
+## 📁 Folder Structure
+
+loansiya-backend/
+├── routes/
+│ ├── scoring.js
+│ ├── metrics.js
+│ ├── upload.js
+│ ├── documents.js
+│ └── officers.js
+├── utils/
+│ └── gcsHelper.js
+├── .env
+├── server.js
+└── package.json
+
+yaml
+Copy
+Edit
+
+---
+
+## 🔗 Base URL
+
+- **Local**: `http://localhost:5600`
+- **Render**: `https://<your-app-name>.onrender.com`
+
+---
+
+## 📌 API Routes
+---
+
+### 👤 Loan Officers
+
+- `GET /officers`  
+  Get all officer accounts.
+
+- `POST /officers/login`  
+  Login using `{ username, password }`.
+
+---
+
+### 👥 Clients
+
+- `GET /clients`  
+  Get all registered clients.
+
+- `GET /client/:cid`  
+  Get a single client by ID.
+
+- `GET /client/:cid/name`  
+  Get the name of a specific client.
+
+---
+
+### 📊 Credit Scoring
+
+- `POST /metrics/:cid`  
+  Compute credit metrics from raw data in GCS.
+
+- `POST /score/:cid`  
+  Calculate credit score, default risk, and recommendations.
+
+---
+
+### 📄 Document Uploads
+
+- `POST /documents/:cid/:fileType`  
+  Upload `loan-application.json` or `loan-agreement.json`.
+
+- `POST /upload`  
+  Upload any file using multipart form (used for signed agreement PDFs or other documents).
+
+---
+
+## 🛠️ Environment Variables (`.env`)
+
+```env
+PORT=5600
+CLIENT_BUCKET=your-client-gcs-bucket
+ACCOUNTS_BUCKET=your-accounts-gcs-bucket
+SERVICE_ACCOUNT=service-account.json
+SERVICE_ACCOUNT_B64= (optional for Render)
+🚀 Deployment on Render
+Push your code to GitHub.
+
+Go to https://dashboard.render.com
+
+Click "New Web Service" > "From GitHub"
+
+Select your repository.
+
+Fill out the config:
+
+Environment: Node
+
+Region: Oregon (or as preferred)
+
+Build Command: npm install
+
+Start Command: node server.js
+
+Root Directory: leave blank
+
+Environment Variables:
+
+Add CLIENT_BUCKET, ACCOUNTS_BUCKET
+
+Use SERVICE_ACCOUNT_B64 instead of uploading JSON
+
+Click Create Web Service
+
+🧪 Local Development
+bash
+Copy
+Edit
+# Install dependencies
+npm install
+
+# Start server
+node server.js
+Ensure you have a valid service-account.json locally and .env properly set.
+
+🔐 Notes
+Do not push service-account.json to GitHub.
+
+Render will reject commits that include secret credentials.
+
+🧼 .gitignore
+pgsql
+Copy
+Edit
+.env
+*.json
+node_modules/
+uploads/
+temp-service-account.json
